@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect, HttpResponse, get_object_or_404, HttpResponseRedirect
+from .models import Profile, Post, User, Comment
 
 # Create your views here.
 def post(request):
@@ -109,7 +110,7 @@ def follow(request,operation,pk):
         Following.make_user(request.user, new_follower)
     elif operation == 'remove':
         Following.loose_user(request.user, new_follower)
-        
+
      return redirect('posts')
 
 
@@ -122,3 +123,28 @@ def likes(request, post_id):
         post.likes.add(request.user)
         is.is_liked=True
     return HttpResponseRedirect(request.Meta.get('HTTP_REFERER'))
+
+
+def registration(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            form.save()
+            username=form.cleaned_data['username']
+            email=form.cleaned_data['email']
+            password1=form.cleaned_data['password1']
+            recipient=User(username=username,email=email)
+            try:
+                send_welcome_email(username,email)
+                messages.success(request, f'Account has been created successfully!')
+            except:
+                print('error')
+            return redirect('login')
+
+    else:
+        form = RegisterForm()
+    context = {
+        'form':form,
+    }
+    return render(request, 'users/register.html', context)
