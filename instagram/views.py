@@ -34,6 +34,33 @@ def post_create(request):
     }
     return render(request, 'post_create.html', context)
 
+
+def comment(request, post_id):
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.user = request.user
+            post = Post.get_post(post_id)
+            comment.post = post
+            comment.save()
+            return redirect('posts')
+        else:
+            comment_form = CommentForm()
+        context = {
+            "comment_form":comment_form,
+        }
+        return render(request, 'posts.html', context)
+
+
+def commenting(request, post_id):
+    posts = Post.objects.get(pk=post_id)
+    context={
+        "posts":posts,
+    }
+    return render(request, 'comments.html', context)
+
+
 def profile(request):
     posts = Post.objects.all()
     if request.method == 'POST':
@@ -74,3 +101,24 @@ def search_user(request):
             "message":message,
         }
         return render(request, 'search.html', context)
+
+
+def follow(request,operation,pk):
+    new_follower = User.objects.get(pk=pk)
+    if operation == 'add':
+        Following.make_user(request.user, new_follower)
+    elif operation == 'remove':
+        Following.loose_user(request.user, new_follower)
+        
+     return redirect('posts')
+
+
+def likes(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+        is_liked = False
+    else:
+        post.likes.add(request.user)
+        is.is_liked=True
+    return HttpResponseRedirect(request.Meta.get('HTTP_REFERER'))
