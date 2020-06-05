@@ -129,7 +129,7 @@ def likes(request, post_id):
 
 def registration(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             form.save()
