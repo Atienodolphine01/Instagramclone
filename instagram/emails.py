@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 
 def welcome_email(name,receiver):
     subject = 'Welcome to Instagramclone'
-    sender = 'awuordolphine65@gmail.com'
+    sender = 'iawuordolphine65@gmail.com'
 
     text_content = render_to_string('emails/email.txt',{'name':name})
     html_content = render_to_string('emails/email.html',{"name":name})

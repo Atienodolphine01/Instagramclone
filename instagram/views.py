@@ -2,11 +2,12 @@ from django.shortcuts import render,redirect, HttpResponse, get_object_or_404, H
 from .models import Profile, Post, User, Comment,Following
 from django.contrib import messages
 from .forms import *
+from .emails import welcome_email
 
 # Create your views here.
 def post(request):
     posts = Post.objects.all()
-    users = User.objects.exclude(current_user.id)
+    users = User.objects.exclude(id=request.user.id)
     followers = following.users.all()
     following = Following.objects.get(current_user=request_user)
     comments = Comment.objects.all()
