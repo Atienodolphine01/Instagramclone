@@ -11,14 +11,14 @@ from django.contrib.auth.decorators import login_required
 def post(request):
     posts = Post.objects.all()
     users = User.objects.exclude(id=request.user.id)
-    following = Following.objects.get(current_user=request.user)
-    followers = following.users.all()
+    # following = Following.objects.get(current_user=request.user)
+    # followers = following.users.all()
     comments = Comment.objects.all()
     comment_form = CommentForm()
 
     context = {
         "posts":posts,
-        "followers":followers,
+        # "followers":followers,
         "comments":comments,
         "users":users,
         "comment_form":comment_form
@@ -137,7 +137,7 @@ def likes(request, post_id):
     else:
         post.likes.add(request.user)
         is_liked=True
-    return HttpResponseRedirect(request.Meta.get('HTTP_REFERER'))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def registration(request):
