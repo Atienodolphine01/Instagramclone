@@ -60,4 +60,56 @@
                         </div>
                     </div>
                 </div>
-            </div>   
+            </div>
+            <div class="col-md-8">
+                {% for post in posts %}
+                <div class="media-container">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-image">
+                                <div class="profile-image">
+                                    <img class="profile-image" src="{{ post.author.profile.image.url }}" alt="img">
+                                </div>
+                                <div class="post-author">
+                                    <h5 class="account-header mb-2">{{post.author}}</h5>
+                                </div>
+                                <a href="{% url 'commenting' post.id %}"><img class="w-100" src="{{post.image.url}}" alt="{{post.author}}"></a>
+                            </div>
+                            <div class="post-info">
+                                <div class="post-caption">
+                                    <p class="text-black mt-2">{{post.caption}}</p>
+                                </div>
+                            <div class="post-date">
+                                <p>{{post.created_date|timesince}} ago</p>
+                                <a class="text-info ml-3" href="{% url 'commenting' post.id%}"><i class="fa fa-comment"></i>
+                                {{post.comments.all.count}} {{post.comments.all.pluralize}}</a>
+                                <a class="text-info ml-3" href="#"><i class="fa fa-share"></i></a>
+
+                                <div class="count">
+                                {% if post.likes.id == user.id %}
+                                    <a class="text-danger ml-3" href="{% url 'likes' post.id%}"><i class="fa fa-heart "></i>{{post.likes.count}}</a>
+                                {% else %}
+                                <a class="text-info ml-2" href="{% url 'likes' post.id%}"><i class="fa fa-heart "></i>
+                                    {{post.likes.count}}
+                                </a>
+                                {% endif %}
+
+                                </div>
+                            </div>
+                        <div class="comment mt-2">
+                            <form action="{% url 'comment' post.id %}" method="post">
+                            {% csrf_token %}
+                            {{comment_form|crispy}}
+                            <input type="submit" class="btn btn-info"  value="Comment">
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}   
