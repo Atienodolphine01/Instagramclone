@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, HttpResponse, get_object_or_404, HttpResponseRedirect
-from .models import Profile, Post, User, Comment
+from .models import Profile, Post, User, Comment,Following
 from django.contrib import messages
 from .forms import *
 
@@ -113,7 +113,7 @@ def follow(request,operation,pk):
     elif operation == 'remove':
         Following.loose_user(request.user, new_follower)
 
-     return redirect('posts')
+    return redirect('posts')
 
 
 def likes(request, post_id):
@@ -123,7 +123,7 @@ def likes(request, post_id):
         is_liked = False
     else:
         post.likes.add(request.user)
-        is.is_liked=True
+        is_liked=True
     return HttpResponseRedirect(request.Meta.get('HTTP_REFERER'))
 
 

@@ -8,15 +8,17 @@ class RegisterForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
-class CommentForm(forms.modelForm):
-    class Meta:
-        model = Comment
-        fields = ['comment']
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['image', 'bio']
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment']
 
 
 class UserUpdateForm(forms.ModelForm):
