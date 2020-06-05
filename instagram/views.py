@@ -8,8 +8,8 @@ from .emails import welcome_email
 def post(request):
     posts = Post.objects.all()
     users = User.objects.exclude(id=request.user.id)
+    following = Following.objects.get(current_user=request.user)
     followers = following.users.all()
-    following = Following.objects.get(current_user=request_user)
     comments = Comment.objects.all()
     comment_form = CommentForm()
 
