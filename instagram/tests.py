@@ -1,3 +1,25 @@
 from django.test import TestCase
-
+from .models import *
+from django.contrib.auth.models import User
 # Create your tests here.
+
+
+class PostTest(TestCase):
+    def setUp(self):
+        self.post = Post('image',caption='caption',created_date='created_date')
+
+    def test_instance(self):
+        self.assertTrue(isinstance(self.post,Post))
+
+class ProfileTest(TestCase):
+    def setUp(self):
+        self.user = User(username='user', email='email')
+        self.user.save()
+        self.profile = Profile(image='image', bio='bio', user=self.user)
+    def test_instance(self):
+        self.assertTrue(isinstance(self.profile, Profile))
+
+    def test_save(self):
+        self.profile.save_profile()
+        profile = Profile.objects.all()
+        self.assertTrue(len(profile)>0)
