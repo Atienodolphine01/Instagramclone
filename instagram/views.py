@@ -64,6 +64,7 @@ def comment(request, post_id):
         return render(request, 'posts.html', context)
 
 
+@login_required
 def commenting(request, post_id):
     posts = Post.objects.get(pk=post_id)
     context={
